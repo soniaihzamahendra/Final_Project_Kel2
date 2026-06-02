@@ -30,9 +30,26 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->name('owner.')->grou
 
 
 // SUPERVISOR
+Route::prefix('supervisor')->middleware(['auth', 'role:supervisor'])->name('supervisor.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Supervisor\DashboardController::class, 'index'])->name('dashboard');
+    // Monitor transaksi 
+    Route::get('/transaksi', [\App\Http\Controllers\Supervisor\TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('/transaksi/{id}', [\App\Http\Controllers\Supervisor\TransaksiController::class, 'show'])->name('transaksi.show');
+    // Monitor stok 
+    Route::get('/stok', [\App\Http\Controllers\Supervisor\StokController::class, 'index'])->name('stok.index');
+    Route::get('/stok/riwayat', [\App\Http\Controllers\Supervisor\StokController::class, 'riwayat'])->name('stok.riwayat');
+});
+
 
 
 // KASIR 
 
 
 // GUDANG
+Route::prefix('gudang')->middleware(['auth', 'role:pegawai_gudang'])->name('gudang.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Gudang\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/stok', [\App\Http\Controllers\Gudang\StokController::class, 'index'])->name('stok.index');
+    Route::put('/stok/{id}', [\App\Http\Controllers\Gudang\StokController::class, 'update'])->name('stok.update');
+    Route::get('/stok/riwayat', [\App\Http\Controllers\Gudang\StokController::class, 'riwayat'])->name('stok.riwayat');
+});
+
