@@ -27,6 +27,16 @@ Route::prefix('owner')->middleware(['auth', 'role:owner'])->name('owner.')->grou
 });
 
 // MANAJER 
+Route::prefix('manajer')->middleware(['auth', 'role:manajer_toko'])->name('manajer.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Manajer\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/laporan', [\App\Http\Controllers\Manajer\LaporanController::class, 'index'])->name('laporan');
+    Route::get('/laporan/cetak', [\App\Http\Controllers\Manajer\LaporanController::class, 'cetak'])->name('laporan.cetak');
+    Route::get('/transaksi', [\App\Http\Controllers\Manajer\TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('/transaksi/{id}', [\App\Http\Controllers\Manajer\TransaksiController::class, 'show'])->name('transaksi.show');
+    Route::get('/stok', [\App\Http\Controllers\Manajer\StokController::class, 'index'])->name('stok.index');
+    Route::get('/stok/riwayat', [\App\Http\Controllers\Manajer\StokController::class, 'riwayat'])->name('stok.riwayat');
+    Route::resource('/barang', \App\Http\Controllers\Manajer\BarangController::class);
+});
 
 
 // SUPERVISOR
@@ -43,6 +53,10 @@ Route::prefix('supervisor')->middleware(['auth', 'role:supervisor'])->name('supe
 
 
 // KASIR 
+Route::prefix('kasir')->middleware(['auth', 'role:kasir'])->name('kasir.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Kasir\DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('/transaksi', \App\Http\Controllers\Kasir\TransaksiController::class)->only(['index','create','store','show']);
+});
 
 
 // GUDANG
